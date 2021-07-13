@@ -1,16 +1,32 @@
-# advice
+
+#advice_app
 
 A new Flutter project.
 
-## Getting Started
+This project is an advice app. Every time you open the app there is a new advice and there is also a button of new advice and share this advice to everywhere you want to and also a searh button to search specific advice. The app is fully responsive.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+The Splash Screen:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+The splash screen contains the logo of app with welcome text and loader.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+
+
+
+
+
+The Home Screen:
+
+The home screen have an appbar, a container that shows advice, 3 buttons, 1st to get new advice, 2nd to share the advice and 3rd to search advice of yoyr choice.
+
+
+
+Home Screen:
+
+
+
+
+
+Search Screen:
+
