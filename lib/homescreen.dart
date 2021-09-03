@@ -3,6 +3,7 @@ import 'package:advice/search.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share/share.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,10 +15,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   dynamic data, advice;
+  bool loading = false;
 
   Future getAdvice() {
-    data = ApiData().fetchAdvice();
-    advice = data;
+    print("j" + loading.toString());
+    setState(() {
+      data = ApiData().fetchAdvice();
+      loading = false;
+      print("k" + loading.toString());
+    });
     return data;
   }
 
@@ -25,26 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // ApiData().searchAdvice("parents");
     getAdvice();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff262833),
-      appBar: AppBar(
-        title: AutoSizeText(
-          "Advice App",
-          style: TextStyle(
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        elevation: 0.0,
-        centerTitle: true,
-        backgroundColor: Color(0xff36c7d0),
-      ),
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           child: FutureBuilder(
@@ -65,10 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: AutoSizeText(
                             "Your Advice",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 26.0,
-                              fontWeight: FontWeight.bold,
+                            style: GoogleFonts.architectsDaughter(
+                              textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                              ),
                             ),
                           ),
                         ),
@@ -85,21 +81,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               : MediaQuery.of(context).size.height * .3,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(24.0),
-                            color: Colors.white,
+                            color: Colors.grey.shade300,
                           ),
                           padding: EdgeInsets.all(24.0),
                           child: Center(
-                            child: AutoSizeText(
-                              advice,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 22.0,
-                              ),
-                              maxLines: MediaQuery.of(context).orientation ==
-                                      Orientation.portrait
-                                  ? 4
-                                  : 3,
-                            ),
+                            child: loading == true
+                                ? CircularProgressIndicator()
+                                : AutoSizeText(
+                                    '"$advice"',
+                                    style: GoogleFonts.giveYouGlory(
+                                      textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 22.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    maxLines:
+                                        MediaQuery.of(context).orientation ==
+                                                Orientation.portrait
+                                            ? 4
+                                            : 3,
+                                  ),
                           ),
                         ),
                       ],
@@ -120,27 +122,31 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: OutlinedButton(
                               onPressed: () {
                                 setState(() {
-                                  getAdvice();
+                                  loading = true;
+                                  print("i" + loading.toString());
                                 });
+                                getAdvice();
                               },
                               child: AutoSizeText(
                                 "New Advice",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 26.0,
+                                style: GoogleFonts.architectsDaughter(
+                                  textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 26.0,
+                                  ),
                                 ),
                                 maxLines: 1,
                               ),
                               style: OutlinedButton.styleFrom(
                                 side: BorderSide(
-                                  color: Color(0xff36c7d0),
+                                  color: Colors.grey.shade300,
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(12),
                                   ),
                                 ),
-                                backgroundColor: Color(0xff36c7d0),
+                                backgroundColor: Colors.grey.shade300,
                               ),
                             ),
                           ),
@@ -178,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Icon(
                                           Icons.share_rounded,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           size: 30.0,
                                         ),
                                         SizedBox(
@@ -188,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: AutoSizeText(
                                             "Share",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.black,
                                               fontSize: 26.0,
                                             ),
                                             maxLines: 1,
@@ -198,14 +204,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     style: OutlinedButton.styleFrom(
                                       side: BorderSide(
-                                        color: Color(0xff36c7d0),
+                                        color: Colors.grey.shade300,
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(12),
                                         ),
                                       ),
-                                      backgroundColor: Color(0xff36c7d0),
+                                      backgroundColor: Colors.grey.shade300,
                                     ),
                                   ),
                                 ),
@@ -241,7 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Icon(
                                           Icons.search_rounded,
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           size: 30.0,
                                         ),
                                         SizedBox(
@@ -251,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: AutoSizeText(
                                             "Search",
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.black,
                                               fontSize: 26.0,
                                             ),
                                             maxLines: 1,
@@ -261,14 +267,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     style: OutlinedButton.styleFrom(
                                       side: BorderSide(
-                                        color: Color(0xff36c7d0),
+                                        color: Colors.grey.shade300,
                                       ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(12),
                                         ),
                                       ),
-                                      backgroundColor: Color(0xff36c7d0),
+                                      backgroundColor: Colors.grey.shade300,
                                     ),
                                   ),
                                 ),
