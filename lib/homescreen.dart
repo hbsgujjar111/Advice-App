@@ -19,11 +19,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future getAdvice() {
     print("j" + loading.toString());
-    setState(() {
-      data = ApiData().fetchAdvice();
-      loading = false;
-      print("k" + loading.toString());
-    });
+    data = ApiData().fetchAdvice();
+
+    setState(() {});
+    loading = false;
+    print("k" + loading.toString());
     return data;
   }
 
@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAdvice();
+    data = ApiData().fetchAdvice();
   }
 
   @override
@@ -44,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
             future: data,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                advice = snapshot.data.toString();
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -53,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                            top: 20.0,
-                            bottom: 20.0,
+                            top: MediaQuery.of(context).size.height * .03,
+                            bottom: MediaQuery.of(context).size.height * .03,
                           ),
                           child: AutoSizeText(
                             "Your Advice",
@@ -80,28 +79,30 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? MediaQuery.of(context).size.height * .24
                               : MediaQuery.of(context).size.height * .3,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24.0),
+                            borderRadius: BorderRadius.circular(
+                              MediaQuery.of(context).size.width * .04,
+                            ),
                             color: Colors.grey.shade300,
                           ),
-                          padding: EdgeInsets.all(24.0),
+                          padding: EdgeInsets.all(
+                            MediaQuery.of(context).size.width * .06,
+                          ),
                           child: Center(
-                            child: loading == true
-                                ? CircularProgressIndicator()
-                                : AutoSizeText(
-                                    '"$advice"',
-                                    style: GoogleFonts.giveYouGlory(
-                                      textStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 22.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    maxLines:
-                                        MediaQuery.of(context).orientation ==
-                                                Orientation.portrait
-                                            ? 4
-                                            : 3,
-                                  ),
+                            child: AutoSizeText(
+                              '"' + snapshot.data.toString() + '"',
+                              style: GoogleFonts.giveYouGlory(
+                                textStyle: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: MediaQuery.of(context).orientation ==
+                                      Orientation.portrait
+                                  ? 4
+                                  : 3,
+                            ),
                           ),
                         ),
                       ],
@@ -111,45 +112,47 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.symmetric(
-                            vertical: 30.0,
+                            vertical: MediaQuery.of(context).size.height * .06,
                           ),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * .86,
-                            height: MediaQuery.of(context).orientation ==
-                                    Orientation.portrait
-                                ? MediaQuery.of(context).size.height * .07
-                                : MediaQuery.of(context).size.height * .12,
-                            child: OutlinedButton(
-                              onPressed: () {
-                                setState(() {
-                                  loading = true;
-                                  print("i" + loading.toString());
-                                });
-                                getAdvice();
-                              },
-                              child: AutoSizeText(
-                                "New Advice",
-                                style: GoogleFonts.architectsDaughter(
-                                  textStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 26.0,
+                          child: loading == true
+                              ? CircularProgressIndicator()
+                              : InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    getAdvice();
+                                  },
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * .6,
+                                    height: MediaQuery.of(context)
+                                                .orientation ==
+                                            Orientation.portrait
+                                        ? MediaQuery.of(context).size.height *
+                                            .07
+                                        : MediaQuery.of(context).size.height *
+                                            .12,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(
+                                        MediaQuery.of(context).size.width * .03,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: AutoSizeText(
+                                        "New Advice",
+                                        style: GoogleFonts.architectsDaughter(
+                                          textStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 26.0,
+                                          ),
+                                        ),
+                                        maxLines: 1,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                maxLines: 1,
-                              ),
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  color: Colors.grey.shade300,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(12),
-                                  ),
-                                ),
-                                backgroundColor: Colors.grey.shade300,
-                              ),
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -164,54 +167,64 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(
-                                  bottom: 30.0,
+                                  bottom:
+                                      MediaQuery.of(context).size.height * .04,
                                 ),
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * .34,
-                                  height: MediaQuery.of(context).orientation ==
-                                          Orientation.portrait
-                                      ? MediaQuery.of(context).size.height * .07
-                                      : MediaQuery.of(context).size.height *
-                                          .12,
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      Share.share(advice);
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.share_rounded,
-                                          color: Colors.black,
-                                          size: 30.0,
-                                        ),
-                                        SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        Flexible(
-                                          child: AutoSizeText(
-                                            "Share",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 26.0,
-                                            ),
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ],
+                                child: InkWell(
+                                  onTap: () {
+                                    Share.share(advice);
+                                  },
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * .34,
+                                    height: MediaQuery.of(context)
+                                                .orientation ==
+                                            Orientation.portrait
+                                        ? MediaQuery.of(context).size.height *
+                                            .07
+                                        : MediaQuery.of(context).size.height *
+                                            .12,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(
+                                        MediaQuery.of(context).size.width * .03,
+                                      ),
                                     ),
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(12),
+                                    child: Center(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                          children: [
+                                            WidgetSpan(
+                                              child: Icon(
+                                                Icons.share_rounded,
+                                                color: Colors.black,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    .06,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: " Share",
+                                              style: GoogleFonts
+                                                  .architectsDaughter(
+                                                textStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          .06,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      backgroundColor: Colors.grey.shade300,
                                     ),
                                   ),
                                 ),
@@ -222,59 +235,69 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(
-                                  bottom: 30.0,
+                                  bottom:
+                                      MediaQuery.of(context).size.height * .04,
                                 ),
-                                child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * .34,
-                                  height: MediaQuery.of(context).orientation ==
-                                          Orientation.portrait
-                                      ? MediaQuery.of(context).size.height * .07
-                                      : MediaQuery.of(context).size.height *
-                                          .12,
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => SearchAdvice(),
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.search_rounded,
-                                          color: Colors.black,
-                                          size: 30.0,
-                                        ),
-                                        SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        Flexible(
-                                          child: AutoSizeText(
-                                            "Search",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 26.0,
-                                            ),
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                      ],
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SearchAdvice(),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * .34,
+                                    height: MediaQuery.of(context)
+                                                .orientation ==
+                                            Orientation.portrait
+                                        ? MediaQuery.of(context).size.height *
+                                            .07
+                                        : MediaQuery.of(context).size.height *
+                                            .12,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(
+                                        MediaQuery.of(context).size.width * .03,
+                                      ),
                                     ),
-                                    style: OutlinedButton.styleFrom(
-                                      side: BorderSide(
-                                        color: Colors.grey.shade300,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(12),
+                                    child: Center(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                          children: [
+                                            WidgetSpan(
+                                              child: Icon(
+                                                Icons.search_rounded,
+                                                color: Colors.black,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    .06,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: " Search",
+                                              style: GoogleFonts
+                                                  .architectsDaughter(
+                                                textStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          .06,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      backgroundColor: Colors.grey.shade300,
                                     ),
                                   ),
                                 ),
@@ -286,13 +309,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                );
               }
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              );
             },
           ),
         ),

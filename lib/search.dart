@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:share/share.dart';
 
 import 'api.dart';
@@ -42,12 +43,12 @@ class _SearchAdviceState extends State<SearchAdvice> {
         keyboardAppearance: Brightness.dark,
         keyboardType: TextInputType.name,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.black,
           fontSize: 20.0,
           decoration: TextDecoration.none,
         ),
         textInputAction: TextInputAction.next,
-        cursorColor: Colors.white,
+        cursorColor: Colors.black,
         cursorWidth: 2.0,
         cursorHeight: 26.0,
         decoration: InputDecoration(
@@ -57,11 +58,11 @@ class _SearchAdviceState extends State<SearchAdvice> {
             fontSize: 15.0,
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white, width: 2.0),
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
             borderRadius: BorderRadius.circular(16.0),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff36c7d0), width: 2.0),
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
             borderRadius: BorderRadius.circular(16.0),
           ),
           border: InputBorder.none,
@@ -74,7 +75,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
             height: 63.0,
             width: 60.0,
             decoration: BoxDecoration(
-              color: Color(0xff36c7d0),
+              color: Colors.grey.shade300,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(16.0),
                 bottomRight: Radius.circular(16.0),
@@ -90,7 +91,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                 }
               },
               icon: Icon(Icons.search),
-              color: Colors.white,
+              color: Colors.black,
               iconSize: 30.0,
             ),
           ),
@@ -108,9 +109,9 @@ class _SearchAdviceState extends State<SearchAdvice> {
           : MediaQuery.of(context).size.height * .34,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.0),
-        color: Colors.white,
+        color: Colors.grey.shade300,
       ),
-      padding: EdgeInsets.all(24.0),
+      padding: EdgeInsets.all(16.0),
       margin: EdgeInsets.symmetric(vertical: 10.0),
       child: Center(
         child: Column(
@@ -122,12 +123,16 @@ class _SearchAdviceState extends State<SearchAdvice> {
                 Flexible(
                   child: AutoSizeText(
                     "$text",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22.0,
+                    style: GoogleFonts.giveYouGlory(
+                      textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    maxLines: MediaQuery.of(context).orientation ==
-                            Orientation.portrait
+                    maxLines:
+                    MediaQuery.of(context).orientation ==
+                        Orientation.portrait
                         ? 3
                         : 2,
                   ),
@@ -154,7 +159,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                           children: [
                             Icon(
                               Icons.share_rounded,
-                              color: Colors.white,
+                              color: Colors.black,
                               size: 30.0,
                             ),
                             SizedBox(
@@ -164,7 +169,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                               child: AutoSizeText(
                                 "Share",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontSize: 24.0,
                                 ),
                                 maxLines: 1,
@@ -174,14 +179,14 @@ class _SearchAdviceState extends State<SearchAdvice> {
                         ),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(
-                            color: Color(0xff36c7d0),
+                            color: Colors.white,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(12),
                             ),
                           ),
-                          backgroundColor: Color(0xff36c7d0),
+                          backgroundColor: Colors.white,
                         ),
                       ),
                     ),
@@ -198,18 +203,22 @@ class _SearchAdviceState extends State<SearchAdvice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff262833),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: AutoSizeText(
           "Search Advice",
           style: TextStyle(
-            fontSize: 30.0,
+            color: Colors.black,
+            fontSize: 26.0,
             fontWeight: FontWeight.bold,
           ),
         ),
+        iconTheme: IconThemeData(
+          color: Colors.black,
+        ),
         elevation: 0.0,
         centerTitle: true,
-        backgroundColor: Color(0xff36c7d0),
+        backgroundColor: Colors.grey.shade300,
       ),
       body: Form(
         key: _formKey,
@@ -244,7 +253,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                                       ? Text(
                                           "Total Found Advices : 0",
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           ),
                                         )
                                       : Text(
@@ -252,7 +261,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                                               (snapshot.data
                                                   as Map)['total_results'],
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: Colors.black,
                                           ),
                                         ),
                                 ),
@@ -267,7 +276,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                                       child: Text(
                                         "No advice found matching that search term.",
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           fontSize: 22.0,
                                         ),
                                       ),
@@ -303,7 +312,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                       } else {
                         return Center(
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: Colors.black,
                           ),
                         );
                       }
