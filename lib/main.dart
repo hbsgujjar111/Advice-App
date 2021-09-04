@@ -7,6 +7,9 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.grey,
+      ),
     ),
   );
 }

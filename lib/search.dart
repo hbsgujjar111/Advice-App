@@ -16,188 +16,15 @@ class SearchAdvice extends StatefulWidget {
 }
 
 class _SearchAdviceState extends State<SearchAdvice> {
-  dynamic data, advice;
+  dynamic data;
+  bool loading = false;
 
   Future getAdvice() {
     data = ApiData().searchAdvice(searchQuery.text);
-    advice = data;
+    setState(() {
+      loading = false;
+    });
     return data;
-  }
-
-  //searchBar widget
-  Widget searchBar() {
-    return Container(
-      width: MediaQuery.of(context).size.width * .86,
-      child: TextFormField(
-        initialValue: null,
-        autocorrect: true,
-        controller: searchQuery,
-        validator: (query) {
-          if (query!.isEmpty) {
-            return 'Search Some Advice!';
-          } else {
-            return null;
-          }
-        },
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        keyboardAppearance: Brightness.dark,
-        keyboardType: TextInputType.name,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 20.0,
-          decoration: TextDecoration.none,
-        ),
-        textInputAction: TextInputAction.next,
-        cursorColor: Colors.black,
-        cursorWidth: 2.0,
-        cursorHeight: 26.0,
-        decoration: InputDecoration(
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 22.0, horizontal: 20.0),
-          errorStyle: TextStyle(
-            fontSize: 15.0,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          border: InputBorder.none,
-          hintText: 'Search your advice...',
-          hintStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
-          ),
-          suffixIcon: Container(
-            height: 63.0,
-            width: 60.0,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(16.0),
-                bottomRight: Radius.circular(16.0),
-              ),
-            ),
-            child: IconButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    data = null;
-                  });
-                  getAdvice();
-                }
-              },
-              icon: Icon(Icons.search),
-              color: Colors.black,
-              iconSize: 30.0,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  //advice box widget
-  Widget adviceBox(String text) {
-    return Container(
-      width: MediaQuery.of(context).size.width * .86,
-      height: MediaQuery.of(context).orientation == Orientation.portrait
-          ? MediaQuery.of(context).size.height * .24
-          : MediaQuery.of(context).size.height * .34,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.0),
-        color: Colors.grey.shade300,
-      ),
-      padding: EdgeInsets.all(16.0),
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: AutoSizeText(
-                    "$text",
-                    style: GoogleFonts.giveYouGlory(
-                      textStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    maxLines:
-                    MediaQuery.of(context).orientation ==
-                        Orientation.portrait
-                        ? 3
-                        : 2,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * .28,
-                      height: MediaQuery.of(context).orientation ==
-                              Orientation.portrait
-                          ? MediaQuery.of(context).size.height * .06
-                          : MediaQuery.of(context).size.height * .12,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Share.share("$text");
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.share_rounded,
-                              color: Colors.black,
-                              size: 30.0,
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Flexible(
-                              child: AutoSizeText(
-                                "Share",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24.0,
-                                ),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: Colors.white,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(12),
-                            ),
-                          ),
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -207,10 +34,12 @@ class _SearchAdviceState extends State<SearchAdvice> {
       appBar: AppBar(
         title: AutoSizeText(
           "Search Advice",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 26.0,
-            fontWeight: FontWeight.bold,
+          style: GoogleFonts.architectsDaughter(
+            textStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: MediaQuery.of(context).size.width * .07,
+            ),
           ),
         ),
         iconTheme: IconThemeData(
@@ -226,11 +55,17 @@ class _SearchAdviceState extends State<SearchAdvice> {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.only(
-                  top: 10.0,
-                  bottom: 20.0,
+                padding: EdgeInsets.symmetric(
+                  vertical: MediaQuery.of(context).size.height * .02,
                 ),
-                child: searchBar(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: searchBar(),
+                    ),
+                  ],
+                ),
               ),
               Column(
                 children: [
@@ -252,16 +87,28 @@ class _SearchAdviceState extends State<SearchAdvice> {
                                   child: (snapshot.data as Map).length == 1
                                       ? Text(
                                           "Total Found Advices : 0",
-                                          style: TextStyle(
-                                            color: Colors.black,
+                                          style: GoogleFonts.architectsDaughter(
+                                            textStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .04,
+                                            ),
                                           ),
                                         )
                                       : Text(
                                           "Total Found Advices : " +
                                               (snapshot.data
                                                   as Map)['total_results'],
-                                          style: TextStyle(
-                                            color: Colors.black,
+                                          style: GoogleFonts.architectsDaughter(
+                                            textStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .04,
+                                            ),
                                           ),
                                         ),
                                 ),
@@ -275,9 +122,15 @@ class _SearchAdviceState extends State<SearchAdvice> {
                                       ),
                                       child: Text(
                                         "No advice found matching that search term.",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 22.0,
+                                        style: GoogleFonts.architectsDaughter(
+                                          textStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .06,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -285,43 +138,218 @@ class _SearchAdviceState extends State<SearchAdvice> {
                                 : Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                .76,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                .86,
-                                        child: ListView.builder(
-                                          itemCount: int.parse(
-                                            (snapshot.data
-                                                as Map)['total_results'],
-                                          ),
-                                          itemBuilder: (context, i) {
-                                            return adviceBox(
-                                              (snapshot.data as Map)['slips'][i]
-                                                  ['advice'],
-                                            );
-                                          },
-                                        ),
-                                      ),
+                                      loading == false
+                                          ? Container(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  .74,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .86,
+                                              child: ListView.builder(
+                                                itemCount: int.parse(
+                                                  (snapshot.data
+                                                      as Map)['total_results'],
+                                                ),
+                                                itemBuilder: (context, i) {
+                                                  return adviceBox(
+                                                    (snapshot.data
+                                                            as Map)['slips'][i]
+                                                        ['advice'],
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          : CircularProgressIndicator(),
                                     ],
                                   ),
                           ],
                         );
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.black,
-                          ),
-                        );
                       }
+                      return ColoredBox(color: Colors.black);
                     },
                   ),
                 ],
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  //searchBar widget
+  Widget searchBar() {
+    return Container(
+      width: MediaQuery.of(context).size.width * .86,
+      height: MediaQuery.of(context).size.height * .06,
+      child: TextFormField(
+        initialValue: null,
+        autocorrect: true,
+        controller: searchQuery,
+        validator: (query) {
+          if (query!.isEmpty) {
+            return 'Search Some Advice!';
+          } else {
+            return null;
+          }
+        },
+        keyboardAppearance: Brightness.dark,
+        keyboardType: TextInputType.name,
+        style: GoogleFonts.architectsDaughter(
+          textStyle: TextStyle(
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * .05,
+            decoration: TextDecoration.none,
+            letterSpacing: 2.0,
+          ),
+        ),
+        textInputAction: TextInputAction.next,
+        cursorColor: Colors.black,
+        cursorWidth: 2.0,
+        cursorHeight: 26.0,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * .04,
+          ),
+          errorStyle: TextStyle(
+            fontSize: 15.0,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width * .02,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
+            borderRadius: BorderRadius.circular(
+              MediaQuery.of(context).size.width * .02,
+            ),
+          ),
+          border: InputBorder.none,
+          hintText: 'Search your advice...',
+          hintStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 14.0,
+          ),
+          suffixIcon: Container(
+            width: MediaQuery.of(context).size.width * .1,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(
+                  MediaQuery.of(context).size.width * .02,
+                ),
+                bottomRight: Radius.circular(
+                  MediaQuery.of(context).size.width * .02,
+                ),
+              ),
+            ),
+            child: IconButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  setState(() {
+                    data = null;
+                    loading = true;
+                  });
+                  getAdvice();
+                }
+              },
+              icon: Icon(Icons.search),
+              color: Colors.black,
+              iconSize: 30.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+//advice box widget
+  Widget adviceBox(String text) {
+    return Container(
+      width: MediaQuery.of(context).size.width * .86,
+      height: MediaQuery.of(context).size.height * .24,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+        color: Colors.grey.shade300,
+      ),
+      padding: EdgeInsets.all(16.0),
+      margin: EdgeInsets.symmetric(vertical: 10.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: AutoSizeText(
+                    '" $text "',
+                    style: GoogleFonts.giveYouGlory(
+                      textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: MediaQuery.of(context).size.width * .06,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Share.share(text);
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * .32,
+                    height: MediaQuery.of(context).size.height * .05,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(
+                        MediaQuery.of(context).size.width * .03,
+                      ),
+                    ),
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                          style: Theme.of(context).textTheme.bodyText2,
+                          children: [
+                            WidgetSpan(
+                              child: Icon(
+                                Icons.share_rounded,
+                                color: Colors.black,
+                                size: MediaQuery.of(context).size.width * .06,
+                              ),
+                            ),
+                            TextSpan(
+                              text: " Share",
+                              style: GoogleFonts.architectsDaughter(
+                                textStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * .06,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

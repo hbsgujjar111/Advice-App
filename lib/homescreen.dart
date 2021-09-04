@@ -1,5 +1,6 @@
 import 'package:advice/api.dart';
 import 'package:advice/search.dart';
+import 'package:animations/animations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -74,10 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * .86,
-                          height: MediaQuery.of(context).orientation ==
-                                  Orientation.portrait
-                              ? MediaQuery.of(context).size.height * .24
-                              : MediaQuery.of(context).size.height * .3,
+                          height: MediaQuery.of(context).size.height * .24,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(
                               MediaQuery.of(context).size.width * .04,
@@ -98,67 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               textAlign: TextAlign.center,
-                              maxLines: MediaQuery.of(context).orientation ==
-                                      Orientation.portrait
-                                  ? 4
-                                  : 3,
+                              maxLines: 4,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: MediaQuery.of(context).size.height * .06,
-                          ),
-                          child: loading == true
-                              ? CircularProgressIndicator()
-                              : InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    getAdvice();
-                                  },
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * .6,
-                                    height: MediaQuery.of(context)
-                                                .orientation ==
-                                            Orientation.portrait
-                                        ? MediaQuery.of(context).size.height *
-                                            .07
-                                        : MediaQuery.of(context).size.height *
-                                            .12,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(
-                                        MediaQuery.of(context).size.width * .03,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: AutoSizeText(
-                                        "New Advice",
-                                        style: GoogleFonts.architectsDaughter(
-                                          textStyle: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 26.0,
-                                          ),
-                                        ),
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                         ),
                       ],
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: MediaQuery.of(context).size.width * .07,
+                        vertical: MediaQuery.of(context).size.height * .02,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -172,18 +119,56 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 child: InkWell(
                                   onTap: () {
-                                    Share.share(advice);
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    getAdvice();
                                   },
                                   child: Container(
                                     width:
-                                        MediaQuery.of(context).size.width * .34,
-                                    height: MediaQuery.of(context)
-                                                .orientation ==
-                                            Orientation.portrait
-                                        ? MediaQuery.of(context).size.height *
-                                            .07
-                                        : MediaQuery.of(context).size.height *
-                                            .12,
+                                        MediaQuery.of(context).size.width * .4,
+                                    height: MediaQuery.of(context).size.height *
+                                        .07,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(
+                                        MediaQuery.of(context).size.width * .03,
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: AutoSizeText(
+                                        "New Advice",
+                                        style: GoogleFonts.architectsDaughter(
+                                          textStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).size.height * .04,
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    Share.share(snapshot.data.toString());
+                                  },
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * .4,
+                                    height: MediaQuery.of(context).size.height *
+                                        .07,
                                     decoration: BoxDecoration(
                                       color: Colors.grey.shade300,
                                       borderRadius: BorderRadius.circular(
@@ -231,79 +216,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).size.height * .04,
-                                ),
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SearchAdvice(),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * .34,
-                                    height: MediaQuery.of(context)
-                                                .orientation ==
-                                            Orientation.portrait
-                                        ? MediaQuery.of(context).size.height *
-                                            .07
-                                        : MediaQuery.of(context).size.height *
-                                            .12,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(
-                                        MediaQuery.of(context).size.width * .03,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: RichText(
-                                        text: TextSpan(
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2,
-                                          children: [
-                                            WidgetSpan(
-                                              child: Icon(
-                                                Icons.search_rounded,
-                                                color: Colors.black,
-                                                size: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    .06,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: " Search",
-                                              style: GoogleFonts
-                                                  .architectsDaughter(
-                                                textStyle: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          .06,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -317,6 +229,39 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height * .04,
+        ),
+        child: OpenContainer(
+          closedShape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(100.0),
+            ),
+          ),
+          transitionType: ContainerTransitionType.fadeThrough,
+          transitionDuration: Duration(milliseconds: 1000),
+          openColor: Colors.grey.shade300,
+          closedColor: Colors.grey.shade300,
+          closedElevation: 0.0,
+          closedBuilder: (context, openWidget) {
+            return FloatingActionButton(
+              onPressed: openWidget,
+              elevation: 0.0,
+              backgroundColor: Colors.grey.shade300,
+              child: Icon(
+                Icons.search_rounded,
+                color: Colors.black,
+                size: MediaQuery.of(context).size.width * .09,
+              ),
+            );
+          },
+          openBuilder: (context, closeWidget) {
+            return SearchAdvice();
+          },
         ),
       ),
     );
