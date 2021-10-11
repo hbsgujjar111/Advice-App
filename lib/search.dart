@@ -28,155 +28,207 @@ class _SearchAdviceState extends State<SearchAdvice> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    searchQuery.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: AutoSizeText(
-          "Search Advice",
-          style: GoogleFonts.architectsDaughter(
-            textStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-              fontSize: MediaQuery.of(context).size.width * .07,
+    return Stack(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 1,
+          height: MediaQuery.of(context).size.height * 1,
+          child: Image.asset(
+            "assets/bg1.jpg",
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 1,
+          height: MediaQuery.of(context).size.height * 1,
+          color: Colors.black.withOpacity(.5),
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: AutoSizeText(
+              "Search Advice",
+              style: GoogleFonts.architectsDaughter(
+                textStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                  fontSize: MediaQuery.of(context).size.width * .07,
+                ),
+              ),
+            ),
+            iconTheme: IconThemeData(
+              color: Colors.white70,
+            ),
+            elevation: 0.0,
+            centerTitle: true,
+            backgroundColor: Colors.black.withOpacity(.4),
+          ),
+          body: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: loading == false
+                  ? Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: MediaQuery.of(context).size.height * .02,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: searchBar(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            FutureBuilder(
+                              future: data,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .07,
+                                              bottom: 10.0,
+                                            ),
+                                            child: (snapshot.data as Map)
+                                                        .length ==
+                                                    1
+                                                ? Text(
+                                                    "Total Found Advices : 0",
+                                                    style: GoogleFonts
+                                                        .architectsDaughter(
+                                                      textStyle: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            .04,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    "Total Found Advices : " +
+                                                        (snapshot.data as Map)[
+                                                            'total_results'],
+                                                    style: GoogleFonts
+                                                        .architectsDaughter(
+                                                      textStyle: TextStyle(
+                                                        color: Colors.white70,
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            .04,
+                                                      ),
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                      (snapshot.data as Map).length == 1
+                                          ? Center(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      .07,
+                                                ),
+                                                child: Text(
+                                                  "No advice found matching that search term.",
+                                                  style: GoogleFonts
+                                                      .architectsDaughter(
+                                                    textStyle: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white54,
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              .06,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                loading == false
+                                                    ? Container(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            .74,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            .86,
+                                                        child: ListView.builder(
+                                                          itemCount: int.parse(
+                                                            (snapshot.data
+                                                                    as Map)[
+                                                                'total_results'],
+                                                          ),
+                                                          itemBuilder:
+                                                              (context, i) {
+                                                            return adviceBox(
+                                                              (snapshot.data
+                                                                          as Map)[
+                                                                      'slips']
+                                                                  [i]['advice'],
+                                                            );
+                                                          },
+                                                        ),
+                                                      )
+                                                    : Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                              ],
+                                            ),
+                                    ],
+                                  );
+                                }
+                                return ColoredBox(color: Colors.white54);
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    ),
             ),
           ),
         ),
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        elevation: 0.0,
-        centerTitle: true,
-        backgroundColor: Colors.grey.shade300,
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: MediaQuery.of(context).size.height * .02,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: searchBar(),
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                children: [
-                  FutureBuilder(
-                    future: data,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    left:
-                                        MediaQuery.of(context).size.width * .07,
-                                    bottom: 10.0,
-                                  ),
-                                  child: (snapshot.data as Map).length == 1
-                                      ? Text(
-                                          "Total Found Advices : 0",
-                                          style: GoogleFonts.architectsDaughter(
-                                            textStyle: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .04,
-                                            ),
-                                          ),
-                                        )
-                                      : Text(
-                                          "Total Found Advices : " +
-                                              (snapshot.data
-                                                  as Map)['total_results'],
-                                          style: GoogleFonts.architectsDaughter(
-                                            textStyle: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .04,
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ],
-                            ),
-                            (snapshot.data as Map).length == 1
-                                ? Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(
-                                        MediaQuery.of(context).size.width * .07,
-                                      ),
-                                      child: Text(
-                                        "No advice found matching that search term.",
-                                        style: GoogleFonts.architectsDaughter(
-                                          textStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                .06,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      loading == false
-                                          ? Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .74,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  .86,
-                                              child: ListView.builder(
-                                                itemCount: int.parse(
-                                                  (snapshot.data
-                                                      as Map)['total_results'],
-                                                ),
-                                                itemBuilder: (context, i) {
-                                                  return adviceBox(
-                                                    (snapshot.data
-                                                            as Map)['slips'][i]
-                                                        ['advice'],
-                                                  );
-                                                },
-                                              ),
-                                            )
-                                          : CircularProgressIndicator(),
-                                    ],
-                                  ),
-                          ],
-                        );
-                      }
-                      return ColoredBox(color: Colors.black);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+      ],
     );
   }
 
@@ -200,14 +252,14 @@ class _SearchAdviceState extends State<SearchAdvice> {
         keyboardType: TextInputType.name,
         style: GoogleFonts.architectsDaughter(
           textStyle: TextStyle(
-            color: Colors.black,
+            color: Colors.white54,
             fontSize: MediaQuery.of(context).size.width * .05,
             decoration: TextDecoration.none,
             letterSpacing: 2.0,
           ),
         ),
         textInputAction: TextInputAction.next,
-        cursorColor: Colors.black,
+        cursorColor: Colors.white54,
         cursorWidth: 2.0,
         cursorHeight: 26.0,
         decoration: InputDecoration(
@@ -218,13 +270,15 @@ class _SearchAdviceState extends State<SearchAdvice> {
             fontSize: 15.0,
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
+            borderSide:
+                BorderSide(color: Colors.black.withOpacity(.4), width: 2.0),
             borderRadius: BorderRadius.circular(
               MediaQuery.of(context).size.width * .02,
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade300, width: 2.0),
+            borderSide:
+                BorderSide(color: Colors.black.withOpacity(.4), width: 2.0),
             borderRadius: BorderRadius.circular(
               MediaQuery.of(context).size.width * .02,
             ),
@@ -232,13 +286,13 @@ class _SearchAdviceState extends State<SearchAdvice> {
           border: InputBorder.none,
           hintText: 'Search your advice...',
           hintStyle: TextStyle(
-            color: Colors.black,
+            color: Colors.white54,
             fontSize: 14.0,
           ),
           suffixIcon: Container(
             width: MediaQuery.of(context).size.width * .1,
             decoration: BoxDecoration(
-              color: Colors.grey.shade300,
+              color: Colors.black.withOpacity(.6),
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(
                   MediaQuery.of(context).size.width * .02,
@@ -259,7 +313,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                 }
               },
               icon: Icon(Icons.search),
-              color: Colors.black,
+              color: Colors.white54,
               iconSize: 30.0,
             ),
           ),
@@ -275,7 +329,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
       height: MediaQuery.of(context).size.height * .24,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.0),
-        color: Colors.grey.shade300,
+        color: Colors.black.withOpacity(.4),
       ),
       padding: EdgeInsets.all(16.0),
       margin: EdgeInsets.symmetric(vertical: 10.0),
@@ -291,7 +345,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                     '" $text "',
                     style: GoogleFonts.giveYouGlory(
                       textStyle: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white54,
                         fontSize: MediaQuery.of(context).size.width * .06,
                         fontWeight: FontWeight.bold,
                       ),
@@ -313,7 +367,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                     width: MediaQuery.of(context).size.width * .32,
                     height: MediaQuery.of(context).size.height * .05,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.black.withOpacity(.4),
                       borderRadius: BorderRadius.circular(
                         MediaQuery.of(context).size.width * .03,
                       ),
@@ -326,7 +380,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                             WidgetSpan(
                               child: Icon(
                                 Icons.share_rounded,
-                                color: Colors.black,
+                                color: Colors.white54,
                                 size: MediaQuery.of(context).size.width * .06,
                               ),
                             ),
@@ -335,7 +389,7 @@ class _SearchAdviceState extends State<SearchAdvice> {
                               style: GoogleFonts.architectsDaughter(
                                 textStyle: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white54,
                                   fontSize:
                                       MediaQuery.of(context).size.width * .06,
                                 ),

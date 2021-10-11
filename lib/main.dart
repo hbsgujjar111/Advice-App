@@ -9,6 +9,9 @@ void main() {
       home: HomeScreen(),
       theme: ThemeData(
         primarySwatch: Colors.grey,
+        appBarTheme: AppBarTheme(
+          brightness: Brightness.dark,
+        ),
       ),
     ),
   );
